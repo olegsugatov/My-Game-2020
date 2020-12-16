@@ -5,27 +5,70 @@
 //  Created by olegsugatov on 16.12.2020.
 //
 
-import UIKit
-import QuartzCore
+// import UIKit // автоматически импортируется в SceneKit
+// import QuartzCore нужна для анимации
 import SceneKit
 
 class GameViewController: UIViewController {
-
+    
+    // MARK: = Properties
+    var scene: SCNScene!
+    
+    // MARK: - Methods
+    func addShip() {
+        // Get the ship
+        let ship = getShip()
+        
+        // Set ship coordinates
+        let x = 25
+        let y = 25
+        let z = -120
+        ship.position = SCNVector3(x, y, z)
+        ship.look(at: SCNVector3(2 * x, 2 * y, 2 * z))
+        
+        // Add fkight animation
+        ship.runAction(.move(to: SCNVector3(), duration: 5))
+        
+        // Add the ship to the scene
+        scene.rootNode.addChildNode(ship)
+    }
+   
+    func getShip() -> SCNNode {
+        // Get the scene
+        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        
+        // Get the ship
+        let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!
+        
+        // Return the ship
+        return ship
+    }
+    
+    // MARK: - Iherited Methods
+    // закгружает до отображения
+    // override - перезаписывает родтельскую функцию
     override func viewDidLoad() {
+        
+        // из функции можно обратиться к родительской функции через super.
         super.viewDidLoad()
         
         // create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        scene = SCNScene(named: "art.scnassets/ship.scn")!
         
         // create and add a camera to the scene
+        // на ноду можно повесить камеру, объект или свет
+        // let - константа
         let cameraNode = SCNNode()
         cameraNode.camera = SCNCamera()
+        // добавляет ноду на сцену
         scene.rootNode.addChildNode(cameraNode)
         
         // place the camera
-        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
+        // размещаем камеру в позиции
+//        cameraNode.position = SCNVector3(x: 0, y: 0, z: 15)
         
         // create and add a light to the scene
+        // добавляем свет
         let lightNode = SCNNode()
         lightNode.light = SCNLight()
         lightNode.light!.type = .omni
@@ -33,6 +76,7 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(lightNode)
         
         // create and add an ambient light to the scene
+        // окружение
         let ambientLightNode = SCNNode()
         ambientLightNode.light = SCNLight()
         ambientLightNode.light!.type = .ambient
@@ -40,31 +84,44 @@ class GameViewController: UIViewController {
         scene.rootNode.addChildNode(ambientLightNode)
         
         // retrieve the ship node
-        let ship = scene.rootNode.childNode(withName: "ship", recursively: true)!
+        // удаляет ссылки со сцены
+        // ! - уверены что результат не будет nil
+//        let ship = scene.rootNode.childNode(withName: "ship", recursively: true)! // nil
         
         // animate the 3d object
-        ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
+        // накладывается анимация на объект
+//        ship.runAction(SCNAction.repeatForever(SCNAction.rotateBy(x: 0, y: 2, z: 0, duration: 1)))
         
         // retrieve the SCNView
+        // определяет экран от левого верхнего угла
         let scnView = self.view as! SCNView
         
         // set the scene to the view
         scnView.scene = scene
         
         // allows the user to manipulate the camera
+        // позволяет управлять камерой
         scnView.allowsCameraControl = true
         
         // show statistics such as fps and timing information
+        // статистика снизу
         scnView.showsStatistics = true
         
         // configure the view
+        // цвет задника
         scnView.backgroundColor = UIColor.black
         
         // add a tap gesture recognizer
+        // функция, которая добавлять распознаватель жестов
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         scnView.addGestureRecognizer(tapGesture)
+        
+        // add Ship to the Scene
+        addShip()
     }
     
+    // handeTap - обрабатывает нажатие
+    // MARK: - Actions
     @objc
     func handleTap(_ gestureRecognize: UIGestureRecognizer) {
         // retrieve the SCNView
@@ -101,6 +158,7 @@ class GameViewController: UIViewController {
         }
     }
     
+    // MARK: - Computed Properties
     override var shouldAutorotate: Bool {
         return true
     }
