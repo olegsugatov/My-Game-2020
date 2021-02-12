@@ -114,9 +114,14 @@ class GameViewController: UIViewController {
     }
     
     func removeShip() {
-        scene.rootNode.childNode(withName: "ship", recursively: true)?.removeFromParentNode()
-        // ищет на сцене корабль на сцене где бы он не находился
-        // ? - если перед ним nill строчка не выполняется
+        var ship: SCNNode?
+        
+        repeat {
+            ship =  scene.rootNode.childNode(withName: "ship", recursively: true)
+            ship?.removeFromParentNode()
+            // ищет на сцене корабль на сцене где бы он не находился
+            // ? - если перед ним nill строчка не выполняется
+        } while ship != nil
     }
     
     // MARK: - Iherited Methods
