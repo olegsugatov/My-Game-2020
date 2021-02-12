@@ -6,4 +6,5 @@ Game Template from MDA
 Use Xcode 12 to install
 
 ## Screenshots
-![One plane](https://github.com/olegsugatov/My-Game-2020/blob/main/My%20Game/Screenshots/screenshot01.png)
+![Main Menu restart](https://github.com/olegsugatov/My-Game-2020/blob/main/My%20Game/Screenshots/screenshot01.png)
+![Gameplay](https://github.com/olegsugatov/My-Game-2020/blob/main/My%20Game/Screenshots/screenshot02.png)
